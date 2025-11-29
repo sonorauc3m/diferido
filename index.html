@@ -1,449 +1,196 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Programas en diferido · Sonora UC3M</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diferido · Sonora UC3M</title>
 
-  <style>
-    :root {
-      --sonora-red: #be1622;
-      --sonora-red-dark: #8c1019;
-      --bg-deep: #050307;
-      --card-bg: rgba(0,0,0,0.70);
-      --card-border: rgba(255,255,255,0.16);
-      --text-main: #ffffff;
-      --text-muted: #d4d4d4;
-      --chip-bg: rgba(255,255,255,0.08);
-    }
+<style>
+:root{
+  --sonora:#be1622;
+  --sonora-dark:#46070B;
+  --black:#000000;
+  --white:#ffffff;
+  --soft:#bbbbbb;
+}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
 
-    html, body {
-      height: 100%;
-    }
+/* 🔥 FONDO NUEVO SIN BUGS */
+body{
+  font-family:"Helvetica Now Display","Helvetica Neue",system-ui,sans-serif;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(190,22,34,1) 0%,
+    rgba(120,10,18,0.7) 40%, rgba(50,0,6,0.85) 70%, #000 100%);
+  background-attachment:fixed;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+}
 
-    body {
-      font-family: "Helvetica Now Display", "Helvetica Neue", Helvetica,
-        system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(190,22,34,0.95) 0%, #43050a 40%, var(--bg-deep) 100%);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-    }
+/* CONTENEDOR PRINCIPAL */
+.page{
+  width:100%;
+  max-width:900px;
+  padding:22px 18px 120px;
+  text-align:center;
+}
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+/* LOGO */
+.logo{
+  width:58%;
+  max-width:320px;
+  margin:0 auto 28px;
+  display:block;
+}
 
-    .page {
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 18px 26px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+/* TITULO */
+h1{
+  font-size:1.8rem;
+  margin-bottom:6px;
+  font-weight:800;
+}
+.sub{
+  font-size:0.9rem;
+  opacity:0.85;
+  margin-bottom:26px;
+}
 
-    /* HEADER / LOGO */
+/* GRID PROGRAMAS */
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+@media(min-width:600px){
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+@media(min-width:960px){
+  .grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
 
-    .header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      text-align: center;
-    }
+/* TARJETA */
+.card{
+  background:rgba(0,0,0,0.55);
+  border-radius:16px;
+  padding:16px 18px;
+  border:1px solid rgba(255,255,255,0.12);
+  backdrop-filter:blur(20px);
+  box-shadow:0 12px 28px rgba(0,0,0,0.7);
+  display:flex;
+  flex-direction:column;
+  text-align:left;
+  gap:8px;
+}
+/* NOMBRE */
+.card-title{
+  font-size:1.03rem;
+  font-weight:700;
+  letter-spacing:0.6px;
+}
+/* DESCRIPCIÓN */
+.card-desc{
+  font-size:0.82rem;
+  color:var(--soft);
+  line-height:1.36;
+}
 
-    .logo {
-      width: 210px;
-      max-width: 60%;
-    }
-
-    .tagline {
-      font-size: 0.78rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      opacity: 0.9;
-    }
-
-    .subtitle {
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
-
-    /* SEARCH + META BAR */
-
-    .top-bar {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .search-wrap {
-      flex: 1 1 220px;
-      max-width: 420px;
-      position: relative;
-    }
-
-    .search-input {
-      width: 100%;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.25);
-      padding: 7px 14px;
-      padding-left: 30px;
-      background: rgba(0,0,0,0.45);
-      color: var(--text-main);
-      font-size: 0.82rem;
-      outline: none;
-    }
-
-    .search-input::placeholder {
-      color: rgba(255,255,255,0.6);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.8rem;
-      opacity: 0.8;
-    }
-
-    .count-pill {
-      font-size: 0.78rem;
-      padding: 5px 11px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.55);
-      border: 1px solid rgba(255,255,255,0.3);
-      opacity: 0.9;
-    }
-
-    /* GRID DE PROGRAMAS */
-
-    .grid {
-      margin-top: 4px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-    }
-
-    .card {
-      position: relative;
-      background: var(--card-bg);
-      border-radius: 18px;
-      border: 1px solid var(--card-border);
-      padding: 14px 14px 12px;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.8);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      overflow: hidden;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.12) 0%, transparent 55%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .card-inner {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 20px 48px rgba(0,0,0,0.95);
-      border-color: rgba(255,255,255,0.4);
-    }
-
-    .program-name {
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .program-desc {
-      font-size: 0.83rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-      min-height: 2.1em; /* dos líneas aprox */
-    }
-
-    .chips-row {
-      display: inline-flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 2px;
-    }
-
-    .chip {
-      font-size: 0.7rem;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: var(--chip-bg);
-      border: 1px solid rgba(255,255,255,0.14);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      opacity: 0.85;
-    }
-
-    .platform-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .platform-btn {
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 5px 11px;
-      border-radius: 999px;
-      border: none;
-      background: #ffffff;
-      color: var(--sonora-red-dark);
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.4);
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
-    }
-
-    .platform-btn span.dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--sonora-red);
-    }
-
-    .platform-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 26px rgba(0,0,0,0.7);
-    }
-
-    /* FOOTER */
-
-    footer {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 0.78rem;
-      opacity: 0.85;
-    }
-
-    footer a {
-      opacity: 0.95;
-    }
-
-    /* RESPONSIVE */
-
-    @media (max-width: 768px) {
-      .page {
-        padding: 18px 14px 24px;
-      }
-
-      .logo {
-        width: 180px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+/* BOTONES */
+.btns{
+  margin-top:6px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.play{
+  background:#fff;
+  color:var(--sonora-dark);
+  padding:6px 14px;
+  font-size:0.78rem;
+  border-radius:999px;
+  font-weight:700;
+  text-decoration:none;
+}
+.play:hover{
+  filter:brightness(1.06);
+}
+</style>
 </head>
 <body>
 
 <div class="page">
-  <header class="header">
-    <img src="sonora_2.1_blanco.png" alt="Sonora UC3M" class="logo">
-    <div class="tagline">Programas en diferido</div>
-    <div class="subtitle">Escucha los programas de Sonora cuando quieras.</div>
-  </header>
 
-  <div class="top-bar">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input
-        id="search-input"
-        class="search-input"
-        type="search"
-        placeholder="Buscar programa…"
-      />
-    </div>
-    <div id="count-pill" class="count-pill">0 programas</div>
-  </div>
+  <!-- LOGO SONORA -->
+  <img src="sonora_2.1_blanco.png" class="logo">
 
-  <main id="program-grid" class="grid">
-    <!-- JS rellena aquí -->
-  </main>
+  <h1>Programas en diferido</h1>
+  <div class="sub">Disfruta cuando quieras — Spotify · iVoox · YouTube</div>
 
-  <footer>
-    Sonora UC3M · La radio de la Universidad Carlos III de Madrid ·
-    <a href="https://sonorauc3m.github.io/programacion/" target="_blank" rel="noopener">
-      Ver programación en directo
-    </a>
-  </footer>
+  <div id="programas" class="grid">Cargando…</div>
+
 </div>
 
 <script>
-  // 🔗 Google Sheets
-  const SHEET_ID = "1g9f3Ue9GtdaTbpxp3DCXncrNPhjnHPk0m9QTXdfSAxM";
-  const ODF_SHEET_NAME = "OnDemand";
+/* Google Sheets config */
+const SHEET_ID="1g9f3Ue9GtdaTbpxp3DCXncrNPhjnHPk0m9QTXdfSAxM";
+const SHEET="OnDemand";
 
-  const allPrograms = []; // cache en memoria
+function gviz(sheet){
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${sheet}`;
+}
 
-  function gvizUrl(sheetName) {
-    return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
-  }
+async function load(){
+  const box=document.getElementById("programas");
+  box.innerHTML="Cargando…";
 
-  async function fetchSheet(sheetName) {
-    const res = await fetch(gvizUrl(sheetName), { cache: "no-store" });
-    const text = await res.text();
-    const json = JSON.parse(text.substr(47).slice(0, -2));
-    const rows = json.table.rows || [];
-    return rows.map(r => (r.c || []).map(c => (c && c.v) ? String(c.v) : ""));
-  }
+  try{
+    const r=await fetch(gviz(SHEET));
+    const raw=await r.text();
+    const data=JSON.parse(raw.substr(47).slice(0,-2));
+    const rows=data.table.rows.slice(1);
 
-  async function loadData() {
-    const grid = document.getElementById("program-grid");
-    grid.innerHTML = "<div style='opacity:0.8;font-size:0.9rem;'>Cargando programas…</div>";
+    box.innerHTML="";
 
-    try {
-      const rows = await fetchSheet(ODF_SHEET_NAME);
-      allPrograms.length = 0;
+    rows.forEach(row=>{
+      const c=row.c.map(e=>e?e.v:"");
+      const [name,desc,spot,ivoox,yt]=c;
+      if(!name)return;
 
-      // fila 0 = encabezados
-      rows.slice(1).forEach(cols => {
-        const [nombre, descripcion, spotify, ivoox, youtube] = cols;
-        if (!nombre) return;
-        allPrograms.push({
-          nombre: nombre.trim(),
-          descripcion: (descripcion || "").trim(),
-          spotify: spotify || "",
-          ivoox: ivoox || "",
-          youtube: youtube || ""
-        });
-      });
+      const card=document.createElement("div");
+      card.className="card";
 
-      renderPrograms();
-    } catch (err) {
-      console.error(err);
-      grid.innerHTML = "<div style='opacity:0.8;font-size:0.9rem;'>No se ha podido cargar la información ahora mismo.</div>";
-    }
-  }
+      card.innerHTML=`
+        <div class="card-title">${name}</div>
+        <div class="card-desc">${desc||""}</div>
+      `;
 
-  function renderPrograms() {
-    const grid = document.getElementById("program-grid");
-    const search = document.getElementById("search-input").value.toLowerCase().trim();
-    const countEl = document.getElementById("count-pill");
+      const btns=document.createElement("div");
+      btns.className="btns";
 
-    const filtered = allPrograms.filter(p => {
-      if (!search) return true;
-      return (
-        p.nombre.toLowerCase().includes(search) ||
-        p.descripcion.toLowerCase().includes(search)
-      );
+      if(spot) btns.innerHTML+=`<a class="play" target="_blank" href="${spot}">Spotify</a>`;
+      if(ivoox)btns.innerHTML+=`<a class="play" target="_blank" href="${ivoox}">iVoox</a>`;
+      if(yt)   btns.innerHTML+=`<a class="play" target="_blank" href="${yt}">YouTube</a>`;
+
+      card.appendChild(btns);
+      box.appendChild(card);
     });
 
-    countEl.textContent =
-      filtered.length === 1 ? "1 programa" : `${filtered.length} programas`;
+    if(!box.innerHTML.trim())
+      box.innerHTML="No hay programas todavía.";
 
-    grid.innerHTML = "";
-
-    if (!filtered.length) {
-      grid.innerHTML = "<div style='opacity:0.8;font-size:0.9rem;'>No se ha encontrado ningún programa con ese nombre.</div>";
-      return;
-    }
-
-    filtered.forEach(p => {
-      const card = document.createElement("article");
-      card.className = "card";
-
-      const inner = document.createElement("div");
-      inner.className = "card-inner";
-
-      const name = document.createElement("div");
-      name.className = "program-name";
-      name.textContent = p.nombre;
-
-      const desc = document.createElement("div");
-      desc.className = "program-desc";
-      desc.textContent = p.descripcion || "Programa de Sonora UC3M.";
-
-      const chips = document.createElement("div");
-      chips.className = "chips-row";
-      const chip = document.createElement("span");
-      chip.className = "chip";
-      chip.textContent = "Sonora UC3M";
-      chips.appendChild(chip);
-
-      const platforms = document.createElement("div");
-      platforms.className = "platform-row";
-
-      if (p.spotify) platforms.appendChild(createPlatformBtn("Spotify", p.spotify));
-      if (p.ivoox)   platforms.appendChild(createPlatformBtn("iVoox", p.ivoox));
-      if (p.youtube) platforms.appendChild(createPlatformBtn("YouTube", p.youtube));
-
-      inner.appendChild(name);
-      inner.appendChild(desc);
-      inner.appendChild(chips);
-      if (platforms.children.length) inner.appendChild(platforms);
-
-      card.appendChild(inner);
-      grid.appendChild(card);
-    });
+  }catch(e){
+    box.innerHTML="Error cargando contenido.";
   }
+}
 
-  function createPlatformBtn(label, url) {
-    const a = document.createElement("a");
-    a.className = "platform-btn";
-    a.href = url;
-    a.target = "_blank";
-    a.rel = "noopener";
-
-    const dot = document.createElement("span");
-    dot.className = "dot";
-
-    const text = document.createElement("span");
-    text.textContent = label;
-
-    a.appendChild(dot);
-    a.appendChild(text);
-    return a;
-  }
-
-  // Eventos
-  document.addEventListener("DOMContentLoaded", () => {
-    loadData();
-    document.getElementById("search-input").addEventListener("input", renderPrograms);
-
-    // refresco automático cada 20 segundos
-    setInterval(loadData, 20000);
-  });
+load();
+setInterval(load,20000); // refresco cada 20s
 </script>
 
 </body>
